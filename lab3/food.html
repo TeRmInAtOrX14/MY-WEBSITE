@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Food Center</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: black;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .container {
+            background: #1c1c1c;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
+            text-align: center;
+            width: 400px;
+        }
+        select {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background: #333;
+            color: white;
+        }
+        button {
+            width: 90%;
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background: orange;
+            color: black;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #ff8c00;
+        }
+        textarea {
+            width: 90%;
+            height: 100px;
+            margin-top: 10px;
+            background: #333;
+            color: white;
+            border-radius: 5px;
+            padding: 10px;
+            border: none;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Fast Food Center</h2>
+        <label for="starters">Starters:</label>
+        <select id="starters" multiple>
+            <option value="Spring Rolls - $5">Spring Rolls - $5</option>
+            <option value="Garlic Bread - $4">Garlic Bread - $4</option>
+            <option value="Chicken Wings - $6">Chicken Wings - $6</option>
+        </select>
+        <label for="major">Major Foods:</label>
+        <select id="major" multiple>
+            <option value="Burger - $8">Burger - $8</option>
+            <option value="Pizza - $12">Pizza - $12</option>
+            <option value="Pasta - $10">Pasta - $10</option>
+        </select>
+        <label for="desserts">Desserts:</label>
+        <select id="desserts" multiple>
+            <option value="Ice Cream - $5">Ice Cream - $5</option>
+            <option value="Brownie - $6">Brownie - $6</option>
+            <option value="Cheesecake - $7">Cheesecake - $7</option>
+        </select>
+        <button onclick="addToCart()">Add to Cart</button>
+        <button onclick="placeOrder()">Place Order</button>
+        <textarea id="orderSummary" readonly></textarea>
+    </div>
+    
+    <script>
+        let cart = [];
+        let total = 0;
+
+        function addToCart() {
+            function getSelectedItems(selectId) {
+                let select = document.getElementById(selectId);
+                for (let option of select.options) {
+                    if (option.selected) {
+                        cart.push(option.value);
+                        total += parseFloat(option.value.match(/\$(\d+)/)[1]);
+                    }
+                }
+            }
+            
+            getSelectedItems("starters");
+            getSelectedItems("major");
+            getSelectedItems("desserts");
+            
+            document.getElementById("orderSummary").value = "Cart:\n" + cart.join("\n") + "\nTotal: $" + total;
+        }
+
+        function placeOrder() {
+            if (cart.length === 0) {
+                alert("Your cart is empty. Please add items to the cart first.");
+                return;
+            }
+            alert("Order placed successfully!\n\n" + cart.join("\n") + "\nTotal: $" + total);
+            cart = [];
+            total = 0;
+            document.getElementById("orderSummary").value = "";
+        }
+    </script>
+</body>
+</html>

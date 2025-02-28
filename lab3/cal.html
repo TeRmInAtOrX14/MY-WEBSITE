@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            justify-content: center;
+        }
+        .calculator {
+            width: 500px;
+            background: #111;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #display {
+            width: 100%;
+            height: 80px;
+            font-size: 36px;
+            text-align: right;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 15px;
+            padding: 15px;
+            background: #222;
+            color: white;
+            font-weight: bold;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+        button {
+            width: 70px;
+            height: 70px;
+            font-size: 24px;
+            cursor: pointer;
+            border: none;
+            border-radius: 50%;
+            background: #444;
+            color: white;
+            font-weight: bold;
+        }
+        button:active {
+            background: #666;
+        }
+        .operation {
+            background: orange;
+            color: white;
+        }
+        .history {
+            width: 500px;
+            background: #222;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .history h3 {
+            margin: 0;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" disabled>
+        <div class="buttons">
+            <button onclick="clearDisplay()" class="operation">AC</button>
+            <button onclick="appendToDisplay('(')">(</button>
+            <button onclick="appendToDisplay(')')">)</button>
+            <button onclick="appendToDisplay('%')">%</button>
+            <button onclick="appendToDisplay('/')" class="operation">÷</button>
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button onclick="appendToDisplay('*')" class="operation">×</button>
+            <button onclick="appendToDisplay('-')" class="operation">-</button>
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button onclick="appendToDisplay('+')" class="operation">+</button>
+            <button onclick="appendToDisplay('Math.pow(')">x^y</button>
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button onclick="appendToDisplay('Math.sqrt(')">√</button>
+            <button onclick="appendToDisplay('Math.log10(')">log</button>
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button onclick="calculate()" class="operation">=</button>
+            <button onclick="appendToDisplay('Math.sin(')">sin</button>
+            <button onclick="appendToDisplay('Math.cos(')">cos</button>
+            <button onclick="appendToDisplay('Math.tan(')">tan</button>
+            <button onclick="solveQuadratic()">Quad</button>
+        </div>
+    </div>
+    <div class="history">
+        <h3>Calculation History</h3>
+        <ul id="history-list"></ul>
+    </div>
+    
+    <script>
+        function appendToDisplay(value) {
+            document.getElementById('display').value += value;
+        }
+
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+
+        function calculate() {
+            try {
+                let expression = document.getElementById('display').value;
+                let result = eval(expression);
+                document.getElementById('display').value = result;
+                addToHistory(expression + " = " + result);
+            } catch (e) {
+                alert("Invalid Expression");
+            }
+        }
+
+        function addToHistory(entry) {
+            let historyList = document.getElementById('history-list');
+            let listItem = document.createElement('li');
+            listItem.textContent = entry;
+            historyList.appendChild(listItem);
+        }
+
+        function solveQuadratic() {
+            let a = parseFloat(prompt("Enter coefficient a:"));
+            let b = parseFloat(prompt("Enter coefficient b:"));
+            let c = parseFloat(prompt("Enter coefficient c:"));
+            let discriminant = Math.pow(b, 2) - 4 * a * c;
+            let historyEntry;
+            if (discriminant > 0) {
+                let root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                let root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+                historyEntry = `Quadratic roots: ${root1}, ${root2}`;
+            } else if (discriminant === 0) {
+                let root = -b / (2 * a);
+                historyEntry = `Quadratic root: ${root}`;
+            } else {
+                historyEntry = "No real roots";
+            }
+            alert(historyEntry);
+            addToHistory(historyEntry);
+        }
+    </script>
+</body>
+</html>
